@@ -32,6 +32,8 @@ that inspired further developments at UVic, CFS and elsewhere.. */
 #include "time.h"
 #include "image.h"
 
+#include<queue>
+
 using namespace std;
 
 void GLERROR();

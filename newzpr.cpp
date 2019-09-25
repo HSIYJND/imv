@@ -53,6 +53,19 @@ void glClustSphere::drawMe(){
 }
 */
 
+void two_percent(float & min, float & max, SA<float> * b){
+  unsigned int n_two = floor(0.02 * ((float)b->size()));
+  priority_queue<float> q;
+  unsigned int i;
+  for(i = 0; i < b->size(); i++) q.push( (*b)[i]);
+  for(i = 0; i < n_two; i++) q.pop(); 
+   max = q.top();
+  while(q.size() > n_two) q.pop();
+  min = q.top();
+  while(q.size() > 0) q.pop();
+}
+
+
 void glImage::rebuffer(){
   // dprintf("glImage:: rebuffer()");
   myBi = parentZprInstance->myBi;
@@ -62,16 +75,27 @@ void glImage::rebuffer(){
   SA<float> * b1 = FB->at(myBi->at(0));
   SA<float> * b2 = FB->at(myBi->at(1));
   SA<float> * b3 = FB->at(myBi->at(2));
+  float max1, max2, max3, min1, min2, min3, r1, r2, r3;
+  two_percent(min1, max1, b1);
+  two_percent(min2, max2, b2);
+  two_percent(min3, max3, b3);
+  r1 = 1./(max1 - min1);
+  r2 = 1./(max2 - min2);
+  r3 = 1./(max3 - min3);
+
   int i, j, k, ri;
   k = 0;
   for(i = 0; i < NRow; i++){
     ri = NRow - i - 1;
     for(j = 0; j < NCol; j++){
-      dat->at(k++) = b1->at(ri, j);
-      dat->at(k++) = b2->at(ri, j);
-      dat->at(k++) = b3->at(ri, j);
+      dat->at(k++) = r1 * (b1->at(ri, j) - min1);
+      dat->at(k++) = r2 * (b2->at(ri, j) - min2);
+      dat->at(k++) = r3 * (b3->at(ri, j) - min3);
     }
   }
+
+  
+
   Update = false;
 }
 
