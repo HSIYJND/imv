@@ -357,6 +357,20 @@ void zprInstance::processString(){
 
     break;
     default:
+
+    	try{
+		int i = atoi(&s[0]);
+		if(i >= 1 && i <= ndim){
+		  setrgb(i - 1 , i - 1, i - 1);
+		}
+
+	}
+	catch(std::exception e){
+
+	}
+
+
+
     break;
   }
 }
