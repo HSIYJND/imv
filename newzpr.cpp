@@ -572,7 +572,21 @@ void zprInstance::zprReshape(int w,int h){
     _mouseMiddle = ZPR_ZOOM_MODE;
   }
 
-  printf("mouse (x,y)=(%d,%d)\n", x, y);
+  printf("\nmouse (x,y)=(%d,%d)\n", x, y);
+  printf("row %d col %d\n", y, x);
+  
+  std::vector<glPlottable *>::iterator it;
+  int i = 0;
+  it = myGraphics.begin();
+  glImage * image = (glImage * )(glPlottable *) (*it);
+  int NRow = image->image->NRow;
+  int NCol = image->image->NCol;
+  int NBand = image->image->NBand;
+  SA< SA<float> * > * FB = image->image->getFloatBuffers();
+  for(i = 0; i < NBand; i++){
+	  cout << "\tband " << i << "->" << FB->at(i)->at(y * NCol + x) << endl;
+  }
+
   if(callMeWithMouseClickCoordinates){
     (*callMeWithMouseClickCoordinates)(x,y);
   }
